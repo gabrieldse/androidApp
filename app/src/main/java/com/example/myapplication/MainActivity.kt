@@ -1,50 +1,35 @@
 package com.example.myapplication
 
-// I added:
-
-
-// it was already at the project
+//import com.example.compose.tutorial.SampleData
 import android.content.res.Configuration
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.compose.tutorial.SampleData
+import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.foundation.clickable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 
-
-
-class MainActivity : ComponentActivity() {
+/*class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -54,61 +39,83 @@ class MainActivity : ComponentActivity() {
 
         }
     }
-}
+}*/
 
-data class Message(val author: String, val body: String)
+data class ArtworkInformation(val title: String, val artist: String, val creationYear: Int)
+
+//create a main typography element
+val replyTypography = Typography(
+    titleLarge = TextStyle(
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 22.sp,
+        lineHeight = 28.sp,
+        letterSpacing = 0.sp
+    ),
+    titleMedium = TextStyle(
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.15.sp
+    ),
+)
 
 @Composable
-fun MessageCard(msg: Message) {
-    Row (modifier = Modifier.padding(all = 8.dp)){
+fun Gallery(artwork: ArtworkInformation) {
+    Column (
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Image(
             painter = painterResource(id = R.drawable.pika),
-            contentDescription = "Contact profile picture",
+            contentDescription = "Artwork photo",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .border(1.5.dp, MaterialTheme.colorScheme.primaryContainer, CircleShape)
+                .size(300.dp)
+                .clip(shape = RoundedCornerShape(40.dp))
+                //.border(1.5.dp, MaterialTheme.colorScheme.primaryContainer, CircleShape)
                 //.fillMaxSize(1)
         )
         Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = artwork.title,
+            color = MaterialTheme.colorScheme.secondaryContainer,
+            style = MaterialTheme.typography.titleLarge,
+            //textAlign = TextAlign.Center
 
-        var isExpanded by remember { mutableStateOf(false) }
-
-
-        Column (modifier = Modifier.clickable { isExpanded = !isExpanded }) {
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = artwork.artist,
+            color = MaterialTheme.colorScheme.secondaryContainer,
+            style = MaterialTheme.typography.titleMedium
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Surface(
+            shape = MaterialTheme.shapes.medium, tonalElevation = 1.dp
+        ) {
             Text(
-                text = msg.author,
-                color = MaterialTheme.colorScheme.secondaryContainer,
+                text = artwork.title,
+                modifier = Modifier.padding(all = 4.dp),
                 style = MaterialTheme.typography.titleSmall
             )
-            //Text(text = msg.author)
-            Spacer(modifier = Modifier.height(8.dp))
-            Surface(
-                shape = MaterialTheme.shapes.medium, tonalElevation = 1.dp
-            ) {
-                Text(
-                    text = msg.body,
-                    modifier = Modifier.padding(all = 4.dp),
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = if (isExpanded) Int.MAX_VALUE else 1
 
-
-                )
-            }
         }
     }
 }
 
-//@Composable
-//fun Greeting(name: String, modifier: Modifier = Modifier) {
-    //Text(
-            //text = "Hello $name!",
-            //modifier = modifier
-    //)
-//}
-
+@Preview( name = "Light Mode")
 @Composable
+fun PreviewMessageCard() {
+    MyApplicationTheme {
+        Surface {
+            val artwork = ArtworkInformation(title = "'Pikachu'", artist = "Atsuko Nishid", creationYear = 1996 )
+            Gallery(artwork)
+
+        }
+    }
+}
+
+/*@Composable
 fun Conversation(messages: List<Message>) {
     LazyColumn{
         items(messages) { message ->
@@ -116,31 +123,19 @@ fun Conversation(messages: List<Message>) {
         }
     }
 
-}
+}*/
 
-
-@Preview( name = "Light Mode")
-@Preview(
+/*@Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     showBackground = true,
     name = "Dark Mode"
-)
-@Composable
-fun PreviewMessageCard() {
-    MyApplicationTheme {
-        Surface {
-            MessageCard(
-                msg = Message("Gabriel", "Les MEAnimaux!")
-            )
-        }
-    }
-}
+)*/
 
-@Preview
+/*@Preview
 @Composable
 fun PreviewConversation() {
     MyApplicationTheme {
         Conversation(SampleData.conversationSample)
     }
-}
+}*/
 
